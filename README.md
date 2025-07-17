@@ -54,21 +54,21 @@ This is a backend for a Learning Management System (LMS) built with Node.js, Exp
      - `POST /api/auth/register`: Register a new user.
      - `POST /api/auth/login`: Log in an existing user.
    - **Courses:**
-     - `POST /api/courses/post`: Create a new course (Admin only).
+     - `POST /api/courses/post`: Create a new course (Requires Auth, Admin only).
      - `GET /api/courses/get`: Get all courses.
      - `GET /api/courses/:id`: Get a course by its ID.
    - **Lessons:**
-     - `POST /api/lessons/add`: Add a new lesson to a course (Admin only).
+     - `POST /api/lessons/add`: Add a new lesson to a course (Requires Auth, Admin only).
      - `GET /api/lessons/:courseId`: Get all lessons for a specific course.
    - **Quizzes:**
-     - `POST /api/quizzes/add`: Create a new quiz for a course (Admin only).
+     - `POST /api/quizzes/add`: Create a new quiz for a course (Requires Auth, Admin only).
      - `GET /api/quizzes/course/:courseId`: Get all quizzes for a specific course.
      - `GET /api/quizzes/:quizId`: Get a quiz by its ID.
-     - `POST /api/quizzes/:quizId/attempt`: Attempt a quiz.
-     - `GET /api/quizzes/:quizId/scores`: Get the scores for a quiz.
+     - `POST /api/quizzes/:quizId/attempt`: Attempt a quiz (Requires Auth).
+     - `GET /api/quizzes/:quizId/scores`: Get the scores for a quiz (Requires Auth).
    - **Progress:**
-     - `POST /api/progress/marklessonascomplete`: Mark a lesson as completed.
-     - `GET /api/progress/:courseId`: Get the user's progress for a specific course.
+     - `POST /api/progress/marklessonascomplete`: Mark a lesson as completed (Requires Auth).
+     - `GET /api/progress/:courseId`: Get the user's progress for a specific course (Requires Auth).
 
 ## Project Structure
 
