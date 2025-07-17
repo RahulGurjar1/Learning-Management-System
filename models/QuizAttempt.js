@@ -6,6 +6,11 @@ const quizAttemptSchema = new mongoose.Schema({
         ref: 'Quiz',
         required: true
     },
+    courseId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+        required: true
+    },
     userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

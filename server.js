@@ -2,9 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const rateLimiter = require('express-rate-limit');
 
 const app =express();
 dotenv.config();
+
+const limiter = rateLimiter({
+    windowMs: 10 * 60 * 1000, // 60 minutes window
+    max: 100, // Limiting to 100 requests per windowMs
+    standardHeaders: true, 
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again after 10 minutes',
+});
+
+app.use(limiter);
 
 // Middleware configuration
 app.use(cors());
@@ -23,7 +34,7 @@ const progressRoutes = require('./routes/progress.route');
 app.use('/progress', progressRoutes);
 
 app.get('/',(req,res)=>{
-    res.send("Backend Started");
+    res.send("Backend is working, go ahead for routes based on readme file on github");
 })
 
 

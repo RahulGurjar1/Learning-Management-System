@@ -27,10 +27,22 @@ const createLesson = async (req, res) => {
 
 const getLessonsByCourse = async (req, res) => {
     const courseId = req.params.courseId;
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
     try {
-        const lessons = await Lesson.find({ courseId });
-        res.json(lessons);
+        const lessons = await Lesson.find({ courseId })
+            .skip((page - 1) * limit)
+            .limit(limit);
+        if(lessons.length === 0) {
+            return res.status(404).json({ message: 'No lessons found for this course' });
+        }
+        const totalLessons = await Lesson.countDocuments({ courseId });
+        res.json({
+            lessons,
+            totalPages: Math.ceil(totalLessons / limit),
+            currentPage: page,
+            totalLessons: totalLessons
+        });
     } catch (err) {
         res.status(500).json({ msg: 'Error fetching lessons', error: err.message });
     }

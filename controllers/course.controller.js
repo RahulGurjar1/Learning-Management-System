@@ -22,7 +22,7 @@ const createCourse = async (req, res)=>{
 
 const getAllCourses = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 5;
     const skip = (page-1)*limit;
     try{
         const courses = await Course.find().skip(skip).limit(limit);
