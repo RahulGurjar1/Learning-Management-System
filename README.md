@@ -50,9 +50,25 @@ This is a backend for a Learning Management System (LMS) built with Node.js, Exp
    The server will start on the port specified in your configuration (default is 3000).
 
 2. **API Endpoints:**
-   - `POST /api/auth/register`: Register a new user.
-   - `POST /api/auth/login`: Log in an existing user.
-   - (Add more endpoints as you create them)
+   - **Authentication:**
+     - `POST /api/auth/register`: Register a new user.
+     - `POST /api/auth/login`: Log in an existing user.
+   - **Courses:**
+     - `POST /api/courses/post`: Create a new course (Admin only).
+     - `GET /api/courses/get`: Get all courses.
+     - `GET /api/courses/:id`: Get a course by its ID.
+   - **Lessons:**
+     - `POST /api/lessons/add`: Add a new lesson to a course (Admin only).
+     - `GET /api/lessons/:courseId`: Get all lessons for a specific course.
+   - **Quizzes:**
+     - `POST /api/quizzes/add`: Create a new quiz for a course (Admin only).
+     - `GET /api/quizzes/course/:courseId`: Get all quizzes for a specific course.
+     - `GET /api/quizzes/:quizId`: Get a quiz by its ID.
+     - `POST /api/quizzes/:quizId/attempt`: Attempt a quiz.
+     - `GET /api/quizzes/:quizId/scores`: Get the scores for a quiz.
+   - **Progress:**
+     - `POST /api/progress/marklessonascomplete`: Mark a lesson as completed.
+     - `GET /api/progress/:courseId`: Get the user's progress for a specific course.
 
 ## Project Structure
 
