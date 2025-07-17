@@ -28,8 +28,10 @@ const getProgressByCourse = async (req, res) => {
     try {
         const completedLessons = await Progress.find({ userId, courseId }).populate('completedLessons');
         // console.log('Completed lessons:', completedLessons);
-        const attemptedQuizzes = await QuizAttempt.find({ userId, courseId });
-        // console.log('Attempted quizzes:', attemptedQuizzes);
+        const attemptedQuizzes = await QuizAttempt.find({ userId,courseId});
+        console.log('Attempted quizzes:', attemptedQuizzes);
+        const attemptedUniqueQuizzes = [...new Set(attemptedQuizzes.map(attempt => attempt.quizId.toString()))];
+        console.log('Attempted Unique quizzes:', attemptedUniqueQuizzes);
         const totalQuizzes = await Course.findById(courseId).populate('quizzes');
         // console.log('Total quizzes:', totalQuizzes);
         const totalLessons = await Course.findById(courseId).populate('lessons');
@@ -38,15 +40,15 @@ const getProgressByCourse = async (req, res) => {
         // console.log("Total lessons count:", totalLessons.lessons.length);
         // console.log("Attempted quizzes count:", attemptedQuizzes.length);
         // console.log("Completed lessons count:", completedLessons.length);
-        const percentageProgess = (totalQuizzes.quizzes.length+totalLessons.lessons.length) > 0 ? ((attemptedQuizzes.length+completedLessons.length) / (totalQuizzes.quizzes.length+totalLessons.lessons.length)) * 100 : 0;
+        const percentageProgess = (totalQuizzes.quizzes.length+totalLessons.lessons.length) > 0 ? ((attemptedUniqueQuizzes.length+completedLessons.length) / (totalQuizzes.quizzes.length+totalLessons.lessons.length)) * 100 : 0;
         // console.log('Percentage progress:', percentageProgess);
 
         if(percentageProgess==0) {
             return res.status(404).json({ message: 'No progress found for this course. 0% progress' });
         }
         res.json({
-            completedLessons: completedLessons.completedLessons,
-            attemptedQuizzes: attemptedQuizzes,
+            completedLessons: completedLessons.length,
+            attemptedUniqueQuizzes: attemptedUniqueQuizzes.length,
             totalQuizzes: totalQuizzes.quizzes.length,
             totalLessons: totalLessons.lessons.length,
             percentageProgress: percentageProgess.toFixed(2) + '%'

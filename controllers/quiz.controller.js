@@ -28,12 +28,22 @@ const createQuiz = async(req,res)=>{
 
 const getQuizzesByCourse = async(req, res) => {
     const courseId = req.params.courseId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
     try {
-        const quizzes = await Quiz.find({ courseId });
+        const quizzes = await Quiz.find({ courseId })
+            .skip((page - 1) * limit)
+            .limit(limit);
         if(quizzes.length === 0) {
             return res.status(404).json({ message: 'No quizzes found for this course' });
         }
-        res.json(quizzes);
+        const totalQuizzes = await Quiz.countDocuments({ courseId });
+        res.json({
+            quizzes,
+            totalPages: Math.ceil(totalQuizzes / limit),
+            currentPage: page,
+            totalQuizzes: totalQuizzes
+        });
     } catch (err) {
         res.status(500).json({ msg: 'Error fetching quizzes', error: err.message });
     }
@@ -72,6 +82,7 @@ const attemptQuiz = async(req, res) => {
         });
         const attempt = new QuizAttempt({
             userId: user,
+            courseId: quiz.courseId,
             quizId: quizId,
             score,
             attemptedAt: new Date()
